@@ -1,54 +1,51 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///         University of Hawaii, College of Engineering
-/// @brief  ee205_lab08d_animalfarm1_to_clion - EE 205 - Spr 2022
+/// @brief  ee205_lab_10d_animal_farm_2 - EE 205 - Spr 2022
 ///
 /// @file addCats.cpp
 /// @version 1.0
 ///
 /// @author Baishen Wang <baishen@hawaii.edu>
-/// @date   20_Mar_2022
+/// @date   19_Mar_2022
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#include <cassert>
+#include <iostream>
 
+#include "config.h"
 #include "catDatabase.h"
 #include "addCats.h"
-#include "config.h"
-#include "catValidation.h"
 
-int addCat( char nameToAdd[], enum Gender isGender, enum Breed isBreed, bool isFixedNew, float weightNew, enum Color collarColor1, enum Color collarColor2, unsigned long long license ){
-    if(currentNumberOfCats >= MAX_CATS){
-        fprintf( stderr, "%s: CurrentNumberOfCats exceeds maximum allowed cats in database.\n", PROGRAM_NAME);
-        return 0;
+using namespace std;
+
+
+
+
+/// Adding a cat to database ///
+
+bool addCat(Cat* newCat) {
+    assert( newCat != nullptr ) ;
+    newCat->validation() ;
+
+    if( isCatInDatabase( newCat ) ) {
+        throw logic_error( PROGRAM_NAME ": The cat is already in database!" ); // the cat already exists //
     }
-    if( !isValidName(nameToAdd) ) {
-        fprintf( stderr, "%s: the name is not valid \n", PROGRAM_NAME);
-        return 0;
-    }
-    if( !isValidWeight( weightNew )) {
-        return 0;
-    }
-    else {
-        int index = 0;
-        while(catNameExists( index, nameToAdd )) { //looking to see if name already exists
-            index++;
-        }
-        index = 0; //reset index to look for empty location.
-        while(( checkForEmptyName( index ) ) && (MAX_CATS > index)){ //searching for first empty spot
-            index++;
-        }
-        strcpy(catsStruct[index].name, nameToAdd);
-        catsStruct[index].isFixed = isFixedNew;
-        catsStruct[index].gender = isGender;
-        catsStruct[index].breed = isBreed;
-        catsStruct[index].weight = weightNew;
-        catsStruct[index].color1 = collarColor1;
-        catsStruct[index].color2 = collarColor2;
-        catsStruct[index].license = license;
-        currentNumberOfCats++;
-        return index;
-    }
+
+    assert( validateDatabase() ) ;
+
+    //// Will add the cat if validated ////
+
+    newCat->next = headPointer ;
+    headPointer = newCat ;
+    numCats++;
+
+    assert( validateDatabase() ) ;
+
+
+#ifdef DEBUG
+    cout << PROGRAM_NAME << ": New cat successfully added" << newCat->getName() << endl ;
+#endif
+
+    return true;
 }
+

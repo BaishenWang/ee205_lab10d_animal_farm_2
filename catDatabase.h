@@ -1,37 +1,32 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///         University of Hawaii, College of Engineering
-/// @brief  ee205_lab08d_animalfarm1_to_clion - EE 205 - Spr 2022
+/// @brief  ee205_lab_10d_animal_farm_2 - EE 205 - Spr 2022
 ///
 /// @file catDatabase.h
-/// @version 1.0
+/// @version 2.0
 ///
 /// @author Baishen Wang <baishen@hawaii.edu>
-/// @date   20_Mar_2022
+/// @date   7_April_2022
 ///////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
-#define MAX_NAME_LENGTH ( 50 )
-#define MAX_CATS ( 1024 )
+#include <cstddef>   // For the size_t datatype
 
-#include <stdbool.h>
+#include "catClass.h"
+#include "config.h"
 
-enum Gender{UNKNOWN_GENDER, MALE, FEMALE};
 
-enum Breed{UNKNOWN_BREED, MAINE_COON, MANX, SHORTHAIR, PERSIAN, SPHYNX};
+extern Cat* headPointer ; // Headpointer
 
-enum Color{BLACK, WHITE, RED, BLUE, GREEN, PINK};
 
-extern int currentNumberOfCats;
+extern NumCats numCats ;
 
-struct Cat {
-    char name[MAX_NAME_LENGTH];
-    bool isFixed;
-    float weight;
-    int gender;
-    int breed;
-    int color1;
-    int color2;
-    unsigned long long license;
-};
+/// Initializes the database for new data ///
+extern void initializeDatabase() ;
 
-extern struct Cat catsStruct[MAX_CATS];
+/// Scans for if cat is in the database
+extern bool isCatInDatabase( const Cat* presentCat ) ;
+
+/// Verifies that the database is valid ///
+extern bool validateDatabase() ;

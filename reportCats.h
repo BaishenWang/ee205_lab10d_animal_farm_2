@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///         University of Hawaii, College of Engineering
-/// @brief  ee205_lab08d_animalfarm1_to_clion - EE 205 - Spr 2022
+/// @brief  ee205_lab_10d_animal_farm_2 - EE 205 - Spr 2022
 ///
 /// @file reportCats.h
 /// @version 1.0
@@ -8,15 +8,23 @@
 /// @author Baishen Wang <baishen@hawaii.edu>
 /// @date   20_Mar_2022
 ///////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
-extern char* colorCollar( const int color );
+#include "config.h"
+#include "catClass.h"
 
-extern char* genderOfCat( const int gender );
+/// Print all present cats in the database //
+extern bool   printAllCats() ;
 
-extern void printCat( const int index );
 
-extern void printAllCats();
+extern Cat* findCatByName( const char* name ) ;
 
-extern int findCats( char nameToFind[] );
+/// Returns the string for the cat's gender //
+extern const char* genderName( enum Gender gender ) ;
 
+/// Returns the string for the cat's breed //
+extern const char* breedName( enum Breed breed ) ;
+
+/// Returns the string for the cat's color //
+extern const char* colorName( enum Color color ) ;

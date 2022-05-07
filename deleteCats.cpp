@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///         University of Hawaii, College of Engineering
-/// @brief  ee205_lab08d_animalfarm1_to_clion - EE 205 - Spr 2022
+/// @brief  ee205_lab_10d_animal_farm_2 - EE 205 - Spr 2022
 ///
 /// @file deleteCats.cpp
 /// @version 1.0
@@ -8,15 +8,67 @@
 /// @author Baishen Wang <baishen@hawaii.edu>
 /// @date   20_Mar_2022
 ///////////////////////////////////////////////////////////////////////////////
-#include <stdio.h>
-#include <string.h>
 
-#include "catDatabase.h"
-#include "deleteCats.h"
+#include <cassert>
+#include <iostream>
+#include <stdexcept>
+
 #include "config.h"
+#include "deleteCats.h"
+#include "catDatabase.h"
+#include "catClass.h"
 
-void deleteAllCats(){
-    printf("Deleting all cats. \n");
-    currentNumberOfCats = 0;
-    memset(catsStruct, 0, sizeof(catsStruct));
+using namespace std ;
+
+////// Deletes cat /////////
+bool deleteCat( Cat* deleteThisCat ) {
+    assert( deleteThisCat != nullptr ) ;
+
+    assert( validateDatabase() ) ;
+
+
+    if( deleteThisCat == headPointer ) {
+        headPointer = headPointer->next ;
+        delete deleteThisCat ;
+        numCats--;
+
+        assert( validateDatabase() ) ;
+        return true ;
+    }
+
+    // Finds specific cat to delete in linked list //
+    Cat* findCat = headPointer ;
+    while( findCat != nullptr ) {
+        if( findCat->next == deleteThisCat ) {
+            findCat->next = deleteThisCat->next ;
+            delete deleteThisCat ;
+            numCats--;
+
+            assert( validateDatabase() ) ;
+
+            return true ;
+        }
+        findCat = findCat->next ;
+    }
+
+    assert( validateDatabase() ) ;
+
+    throw invalid_argument( PROGRAM_NAME ": Unable to delete cat.  Not in database" );
+}
+
+
+
+bool deleteAllCats() {
+    // Will keep deleting cats until there are no more cats...
+    while(headPointer != nullptr ) {
+        deleteCat(headPointer ) ;
+    }
+
+
+
+#ifdef DEBUG
+    cout << PROGRAM_NAME << ": All cats have been deleted" << endl ;
+#endif
+
+    return true ;
 }
